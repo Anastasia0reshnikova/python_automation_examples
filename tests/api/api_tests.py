@@ -3,8 +3,9 @@ from uuid import uuid4
 
 import pytest
 
-from core.data_models import Pet, Category
-from core.petstore_api_client import PetAPI
+from core.api.data_models import Pet, Category
+from core.api.petstore_api_client import PetAPI
+from tests.test_users import TestUsers
 
 new_pet_data = Pet(
     category=Category(id=1, name="home"),
@@ -14,7 +15,7 @@ new_pet_data = Pet(
 
 @pytest.fixture(scope='module')
 def pet_api():
-    return PetAPI()
+    return PetAPI(user=TestUsers.BASIC_USER)
 
 @pytest.fixture
 def new_pet(pet_api):

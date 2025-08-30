@@ -4,7 +4,7 @@ import pytest
 import requests
 
 from core.config import Config
-from core.data_models import Category, Pet
+from core.api.data_models import Category, Pet
 from helpers.api_assertions import verify_ok_response
 
 new_pet_data = Pet(

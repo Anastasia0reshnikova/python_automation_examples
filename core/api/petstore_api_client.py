@@ -1,9 +1,11 @@
 import logging
+import requests
 
 from core.config import Config
 from requests import Session, Response
 
-from core.data_models import Pet
+
+from core.api.data_models import Pet, User
 
 """
 Every client should have base_url and api attributes.
@@ -13,12 +15,21 @@ Base url should be the base url of the api and api should be a requests session.
 logger = logging.getLogger(__name__)
 
 
+def auth(user: User):
+    # data = {"username": user.username, "password": user.password}
+    if user is None:
+        return None
+    request = requests.post(f"{Config.BASE_PET_STORE_URL}/user/login", user.model_dump_json())
+    return request.headers.get("JWT-TOKEN")
+
 class PetAPI:
 
-    def __init__(self):
+    def __init__(self, user: User = None):
         self.base_url = f"{Config.BASE_PET_STORE_URL}/pet"
         self.api = Session()
-        self.api.headers.update({"Content-Type": "application/json"})
+        token = auth(user)
+        self.api.headers.update({"Content-Type": "application/json", "Authorization": f"Bearer {token}"})
+        logger.info(f"{self.base_url}")
 
     def add_new_pet(self, new_pet: Pet):
         response = self.api.post(url=self.base_url, data=new_pet.model_dump_json())

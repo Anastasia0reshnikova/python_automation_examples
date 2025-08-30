@@ -40,3 +40,8 @@ class Pet(BaseModel):
     photoUrls: List[str]
     tags: Optional[List[Tag]] = None
     status: Optional[PetStatus] = None
+
+
+class User(BaseModel):
+    username: str
+    password: str
